@@ -47,8 +47,8 @@ services:
                 - '-p${DB_PASSWORD}'
             retries: 3
             timeout: 5s
-    phpmyadmin:
-        image: phpmyadmin
+    pma:
+        image: phpmyadmin:5.2.1-fpm-alpine
         restart: always
         ports:
           - 8080:80
@@ -57,6 +57,8 @@ services:
           - PMA_HOST=mysql
         networks:
             - sail
+        depends_on:
+            - mysql
 networks:
     sail:
         driver: bridge

@@ -2,11 +2,13 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
+    use WithoutModelEvents;
     /**
      * Seed the application's database.
      */
@@ -18,5 +20,21 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+
+        // $this->call(AdminSeeder::class);
+        // $this->call(RoleSeeder::class);
+        // $this->call(PermissionSeeder::class);
+        // $this->call(PermissionRoleSeeder::class);
+        // $this->call(AdminRoleSeeder::class);
+
+        $this->call(
+            [
+                AdminSeeder::class,
+                RoleSeeder::class,
+                PermissionSeeder::class,
+                PermissionRoleSeeder::class,
+                AdminRoleSeeder::class,
+            ]
+        );
     }
 }

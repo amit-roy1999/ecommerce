@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('permissions', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('route_name');
-            $table->timestamps();
+        Schema::create('admin_role', function (Blueprint $table) {
+            $table->foreignId('role_id')->constrained('roles');
+            $table->foreignId('admin_id')->constrained('admins');
         });
     }
 
@@ -24,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('permissions');
+        Schema::dropIfExists('admin_role');
     }
 };

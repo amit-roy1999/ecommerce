@@ -2,17 +2,18 @@
 
 namespace Database\Seeders;
 
-use App\Models\Admin;
+use App\Models\AdminRole;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class AdminSeeder extends Seeder
+class AdminRoleSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Admin::insert(config('seederData.admins'));
+        AdminRole::insert(config('seederData.adminRole'));
+
     }
 }

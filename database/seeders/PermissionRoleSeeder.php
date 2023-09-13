@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\Admin;
+use App\Models\PermissionRole;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class AdminSeeder extends Seeder
+class PermissionRoleSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Admin::insert(config('seederData.admins'));
+        PermissionRole::insert(config('seederData.permissionRole'));
     }
 }

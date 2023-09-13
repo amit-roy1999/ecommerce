@@ -1,15 +1,20 @@
+const colors = require('tailwindcss/colors');
+
 module.exports = {
     content: [
-      "./resources/**/*.blade.php",
-      "./resources/**/*.js",
-      "./resources/**/*.vue",
-      "./node_modules/flowbite/**/*.js"
+        "./resources/**/*.blade.php",
+        "./resources/**/*.js",
+        "./resources/**/*.vue",
+        "./node_modules/flowbite/**/*.js"
     ],
     theme: {
-      extend: {},
+        extend: {},
+        colors: {
+            primary: colors.sky,
+        },
     },
     darkMode: 'class',
     plugins: [
         require('flowbite/plugin')
     ],
-  }
+}
