@@ -12,9 +12,8 @@ class FormBuilder extends Component
      * Create a new component instance.
      */
     public function __construct(
-        public array $formFildes,
-    )
-    {
+        public array $formData,
+    ) {
         //
     }
 
