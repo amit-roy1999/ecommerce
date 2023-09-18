@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('permissions', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('route_name')->unique();
-            $table->timestamps();
+        Schema::create('access_permission', function (Blueprint $table) {
+            $table->foreignId('access_id')->constrained('accesses');
+            $table->foreignId('permission_id')->constrained('permissions');
         });
     }
 
@@ -24,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('permissions');
+        Schema::dropIfExists('access_permission');
     }
 };

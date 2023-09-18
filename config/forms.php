@@ -9,7 +9,7 @@ return [
         'validation' => [
             'email' => 'required|email|exists:admins,email',
             'password' => 'required',
-            'rememberMe' => 'bool',
+            'rememberMe' => 'nullable|bool',
         ],
         'fildes' => [
             [

@@ -21,8 +21,12 @@ class Login extends Component
     {
         // dd($this);
         $this->validate(config('forms.adminLogin.validation'));
-        if (Auth::guard('admin')->attempt(['email' => $this->email, 'password' => $this->password], $this->rememberMe)) {
-            return redirect()->route('admin.dashbord');
+        try {
+            if (Auth::guard('admin')->attempt(['email' => $this->email, 'password' => $this->password], $this->rememberMe)) {
+                return redirect()->route('admin.dashbord');
+            }
+        } catch (\Throwable $th) {
+            dd($th);
         }
     }
 

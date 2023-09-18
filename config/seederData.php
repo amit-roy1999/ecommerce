@@ -38,15 +38,47 @@ return [
         ]
     ],
 
-    //adminRoleSeeder
-    'adminRole' => [
-        'role_id'  => 1,
-        'admin_id'  => 1,
+    //AccessSeeder
+    'access' => [
+        [
+            'id' => 1,
+            'name' => 'create',
+        ],
+        [
+            'id' => 2,
+            'name' => 'update',
+        ],
+        [
+            'id' => 3,
+            'name' => 'delete',
+        ]
     ],
 
+    //adminRoleSeeder
+    'adminRole' => [[
+        'role_id'  => 1,
+        'admin_id'  => 1,
+    ]],
+
     //permissionRoleSeeder
-    'permissionRole' => [
+    'permissionRole' => [[
         'role_id'  => 1,
         'permission_id'  => 1,
+    ]],
+
+    //AccessPermissionSeeder
+    'accessPermission' => [
+        [
+            'access_id'  => 1,
+            'permission_id'  => 1,
+        ],
+        [
+            'access_id'  => 2,
+            'permission_id'  => 1,
+        ],
+        [
+            'access_id'  => 3,
+            'permission_id'  => 1,
+        ]
     ],
 ];
