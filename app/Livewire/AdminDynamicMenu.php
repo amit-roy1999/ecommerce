@@ -9,8 +9,11 @@ use App\Models\Permission;
 class AdminDynamicMenu extends Component
 {
 
-    public function logout(){
-        
+    public function logout()
+    {
+        // dd('dd');
+        auth()->guard('admin')->logout();
+        return $this->redirect(route('admin.login'), true);
     }
 
     public function render()
