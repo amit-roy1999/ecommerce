@@ -2,6 +2,7 @@
 
 use App\Livewire\DashbordHome;
 use App\Livewire\Login;
+use App\Livewire\RoleCRUD;
 use Illuminate\Support\Facades\Route;
 
 
@@ -13,6 +14,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function(){
 
     Route::group(['middleware' => 'adminAuth'], function(){
         Route::get('/dashbord', DashbordHome::class)->name('dashbord');
+        Route::get('/role-crud', RoleCRUD::class)->name('roleCrud');
     });
 });
 

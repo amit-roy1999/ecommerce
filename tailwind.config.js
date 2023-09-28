@@ -1,21 +1,10 @@
-const colors = require('tailwindcss/colors');
+import preset from './vendor/filament/support/tailwind.config.preset'
 
-module.exports = {
+export default {
+    presets: [preset],
     content: [
-        "./config/*.php",
-        "./resources/**/*.blade.php",
-        "./resources/**/*.js",
-        "./resources/**/*.vue",
-        "./node_modules/flowbite/**/*.js"
-    ],
-    theme: {
-        extend: {},
-        colors: {
-            primary: colors.sky,
-        },
-    },
-    darkMode: 'class',
-    plugins: [
-        require('flowbite/plugin'),
+        './app/Filament/**/*.php',
+        './resources/views/**/*.blade.php',
+        './vendor/filament/**/*.blade.php',
     ],
 }

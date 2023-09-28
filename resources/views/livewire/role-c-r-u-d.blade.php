@@ -1,3 +1,12 @@
 <div>
-    {{-- Knowing others is intelligence; knowing yourself is true wisdom. --}}
+    <div class="my-6">
+        {{ $this->createRoleAction }}
+    </div>
+
+    <div>
+        {{ $this->table }}
+    </div>
+
+
+    <x-filament-actions::modals />
 </div>

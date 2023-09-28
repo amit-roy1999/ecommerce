@@ -2,16 +2,27 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <meta charset="utf-8" />
+
+    <meta name="application-name" content="{{ config('app.name') }}" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{{ config('app.name') }}</title>
+
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
+
+    @filamentStyles
+    @vite('resources/css/app.css')
 </head>
 
-<body class="bg-slate-200">
+<body class="dark:bg-gray-900 antialiased">
     @guest('admin')
-    {{ $slot }}
+        {{ $slot }}
     @endguest
     @auth('admin')
         <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
@@ -101,6 +112,10 @@
         </div>
     @endauth
 
+    @livewire('notifications')
+
+    @filamentScripts
+    @vite('resources/js/app.js')
 </body>
 
 </html>
