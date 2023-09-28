@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Components;
 
 use Livewire\Component;
 use App\Models\Permission;
@@ -19,7 +19,7 @@ class AdminDynamicMenu extends Component
     public function render()
     {
         return view(
-            'livewire.admin-dynamic-menu',
+            'livewire.components.admin-dynamic-menu',
             ['menu' => Permission::whereNotIn('route_name', config('appConfig.hiddenRouteNamesForAdminMenu'))->get(['name', 'route_name'])]
         );
     }
