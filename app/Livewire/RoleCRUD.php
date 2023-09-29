@@ -9,7 +9,12 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Illuminate\Contracts\View\View;
 use Filament\Actions\Concerns\InteractsWithActions;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Table;
@@ -27,8 +32,17 @@ class RoleCRUD extends Component implements HasForms, HasActions, HasTable
                 TextInput::make('name')
                     ->label('Role Name')
                     ->rules(['required', 'string', 'unique:roles,name']),
+                // Select::make('permissions')
+                //     ->multiple()
+                //     ->options([
+                //         'tailwind' => 'Tailwind CSS',
+                //         'alpine' => 'Alpine.js',
+                //         'laravel' => 'Laravel',
+                //         'livewire' => 'Laravel Livewire',
+                //     ])
             ])
             ->action(function (array $data): void {
+                // dd($data);
                 Role::create($data);
             });
     }
@@ -38,16 +52,28 @@ class RoleCRUD extends Component implements HasForms, HasActions, HasTable
         return $table
             ->query(Role::query())
             ->columns([
-                TextColumn::make('name'),
+                TextColumn::make('id')->rowIndex()->sortable(),
+                TextColumn::make('name')->sortable()->searchable(isIndividual: true),
+                TextColumn::make('permissions.name')->badge(),
+                TextColumn::make('created_at')->label('Created At')->sortable()->since(),
+                TextColumn::make('updated_at')->sortable()->dateTime(),
             ])
             ->filters([
                 // ...
             ])
             ->actions([
-                // ...
+                EditAction::make('edit')
+                    ->form([
+                        TextInput::make('name')
+                            ->label('Role Name')
+                            ->rules(['required', 'string', 'unique:roles,name']),
+                    ]),
+                DeleteAction::make()
             ])
             ->bulkActions([
-                // ...
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                ]),
             ]);
     }
 
