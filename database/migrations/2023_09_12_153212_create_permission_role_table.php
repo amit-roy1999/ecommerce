@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('permission_role', function (Blueprint $table) {
-            $table->foreignId('role_id')->constrained('roles');
+            $table->foreignId('role_id')->constrained('roles')->cascadeOnDelete();
             $table->foreignId('permission_id')->constrained('permissions');
             $table->json('accesses')->comment(\App\Enum\ModulesAccessesEnum::returnAllCaseJson());
         });

@@ -9,11 +9,19 @@ enum ModulesAccessesEnum: int
     case Update = 2;
     case Delete = 3;
 
-    static function returnAllCaseJson() : string {
+    static function returnAllCaseJson() : string{
         $return = [];
         foreach (ModulesAccessesEnum::cases() as $value) {
             $return[] = [$value->name => $value->value];
         }
         return json_encode($return);
+    }
+
+    static function returnAllCaseforDropdown() : array{
+        $return = [];
+        foreach (ModulesAccessesEnum::cases() as $value) {
+            $return[] = [$value->value => $value->name];
+        }
+        return collect($return)->flatten()->toArray();
     }
 }
