@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('permission_role', function (Blueprint $table) {
             $table->foreignId('role_id')->constrained('roles');
             $table->foreignId('permission_id')->constrained('permissions');
+            $table->json('accesses')->comment(\App\Enum\ModulesAccessesEnum::returnAllCaseJson());
         });
     }
 

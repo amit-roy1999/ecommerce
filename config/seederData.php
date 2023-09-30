@@ -1,5 +1,7 @@
 <?php
 
+use App\Enum\ModulesAccessesEnum;
+
 $now = now();
 $pasword = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi';
 
@@ -38,22 +40,6 @@ return [
         ]
     ],
 
-    //AccessSeeder
-    'access' => [
-        [
-            'id' => 1,
-            'name' => 'create',
-        ],
-        [
-            'id' => 2,
-            'name' => 'update',
-        ],
-        [
-            'id' => 3,
-            'name' => 'delete',
-        ]
-    ],
-
     //adminRoleSeeder
     'adminRole' => [[
         'role_id'  => 1,
@@ -64,21 +50,7 @@ return [
     'permissionRole' => [[
         'role_id'  => 1,
         'permission_id'  => 1,
+        'accesses' => json_encode(ModulesAccessesEnum::All, true)
     ]],
 
-    //AccessPermissionSeeder
-    'accessPermission' => [
-        [
-            'access_id'  => 1,
-            'permission_id'  => 1,
-        ],
-        [
-            'access_id'  => 2,
-            'permission_id'  => 1,
-        ],
-        [
-            'access_id'  => 3,
-            'permission_id'  => 1,
-        ]
-    ],
 ];

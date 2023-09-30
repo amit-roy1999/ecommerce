@@ -15,8 +15,4 @@ class Permission extends Model
         'route_name',
     ];
 
-    public function accesses() : BelongsToMany
-    {
-        return $this->belongsToMany(Access::class, 'access_permission');
-    }
 }

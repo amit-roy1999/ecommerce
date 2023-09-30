@@ -16,3 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', 'admin/login');
 
+Route::get('test', function() {
+   dd(App\Models\Role::with('permissions')->get()->toArray()[0]['permissions'][0]['pivot']['accesses']);
+});
+
