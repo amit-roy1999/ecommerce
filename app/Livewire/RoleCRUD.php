@@ -13,11 +13,14 @@ use Illuminate\Contracts\View\View;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Set;
 use Filament\Tables\Actions\Action as ActionsAction;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Table;
@@ -32,7 +35,9 @@ class RoleCRUD extends Component implements HasForms, HasActions, HasTable
 
     public function mount()
     {
-        $this->allPermissions = Permission::get(['id', 'name'])->map(fn ($item) => [$item->id => $item->name])->flatten()->toArray();
+        foreach (Permission::get(['id', 'name']) as $value) {
+            $this->allPermissions[$value->id] = $value->name;
+        }
     }
     public function createRoleAction(): Action
     {
@@ -62,24 +67,41 @@ class RoleCRUD extends Component implements HasForms, HasActions, HasTable
                 // ...
             ])
             ->actions([
-                ActionsAction::make('addPermission')
-                    ->form([
-                        Select::make('permissions')
-                            ->options($this->allPermissions),
-                        Select::make('accesses')
-                            ->multiple()
-                            ->options(ModulesAccessesEnum::returnAllCaseforDropdown())
-                    ])
-                    ->action(function (Role $role, $data): void {
-                        $role->permissions()->attach($data['permissions'], ['accesses' => json_encode($data['accesses'])]);
-                    }),
-                EditAction::make('edit')
-                    ->form([
-                        TextInput::make('name')
-                            ->label('Role Name')
-                            ->rules(['required', 'string', 'unique:roles,name']),
-                    ]),
-                DeleteAction::make()
+                ActionGroup::make([
+                    ActionsAction::make('Permissions')
+                        ->form([
+                            Select::make('permission')
+                                ->options($this->allPermissions)
+                                ->live()
+                                ->afterStateUpdated(function (Set $set, ?string $state, Role $role) {
+                                    $val = $role->permissions()->wherePivot('permission_id', $state)->first()?->toArray()['pivot']['accesses'];
+                                    if ($val !== null) {
+                                        $set('accesses', json_decode($val));
+                                    }
+                                })->rules(['required', 'string']),
+                            Select::make('accesses')
+                                ->multiple()
+                                ->options(ModulesAccessesEnum::returnAllCaseforDropdown())
+                                ->rules(['required', 'array'])
+                        ])
+                        ->action(function (Role $role, $data): void {
+                            $role->permissions()->syncWithoutDetaching([$data['permission'] => ['accesses' => json_encode($data['accesses'])]]);
+                        }),
+                    EditAction::make('edit')
+                        ->form([
+                            TextInput::make('name')
+                                ->label('Role Name')
+                                ->rules(['required', 'string', 'unique:roles,name']),
+                        ]),
+                    ViewAction::make()
+                        ->form([
+                            TextInput::make('name')
+                                ->label('Role Name')
+                                ->rules(['required', 'string', 'unique:roles,name']),
+                        ]),
+                    DeleteAction::make()
+                ])
+
             ])
             ->bulkActions([
                 BulkActionGroup::make([

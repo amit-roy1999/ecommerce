@@ -55,7 +55,6 @@ class PermissionCRUD extends Component implements HasForms, HasActions, HasTable
             ->columns([
                 TextColumn::make('id')->rowIndex()->sortable(),
                 TextColumn::make('name')->sortable()->searchable(isIndividual: true),
-                TextColumn::make('accesses.name')->badge()->separator(','),
                 TextColumn::make('created_at')->label('Created At')->sortable()->since(),
                 TextColumn::make('updated_at')->sortable()->dateTime(),
             ])
