@@ -17,7 +17,7 @@
     </style>
 
     @filamentStyles
-    @vite('resources/css/app.css')
+    @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
 
 <body class="dark:bg-gray-900 antialiased">
@@ -47,7 +47,7 @@
                         </a>
                     </div>
                     <div class="flex items-center">
-                        {{-- <div class="flex items-center ml-3">
+                        <div class="flex items-center ml-3">
                             <div>
                                 <button type="button"
                                     class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
@@ -91,7 +91,7 @@
                                     </li>
                                 </ul>
                             </div>
-                        </div> --}}
+                        </div>
                     </div>
                 </div>
             </div>
