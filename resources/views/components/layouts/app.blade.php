@@ -17,7 +17,7 @@
     </style>
 
     @filamentStyles
-    @vite(['resources/css/app.css','resources/js/app.js'])
+    @vite('resources/css/app.css')
 </head>
 
 <body class="dark:bg-gray-900 antialiased">
@@ -111,8 +111,6 @@
             {{ $slot }}
         </div>
     @endauth
-
-    @livewire('notifications')
 
     @filamentScripts
     @vite('resources/js/app.js')
