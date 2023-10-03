@@ -54,6 +54,7 @@ class PermissionCRUD extends Component implements HasForms, HasActions, HasTable
             ->columns([
                 TextColumn::make('id')->rowIndex()->sortable(),
                 TextColumn::make('name')->sortable()->searchable(isIndividual: true),
+                TextColumn::make('roles.name')->badge(),
                 TextColumn::make('created_at')->label('Created At')->sortable()->since(),
                 TextColumn::make('updated_at')->sortable()->dateTime(),
             ])
@@ -64,8 +65,8 @@ class PermissionCRUD extends Component implements HasForms, HasActions, HasTable
                 EditAction::make('edit')
                     ->form([
                         TextInput::make('name')
-                            ->label('Role Name')
-                            ->rules(['required', 'string', 'unique:roles,name']),
+                            ->label('Permission Name')
+                            ->rules(['required', 'string', 'unique:permissions,name']),
                     ]),
                 DeleteAction::make()
             ])

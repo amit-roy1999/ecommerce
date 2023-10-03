@@ -2,7 +2,7 @@
     @foreach ($menu as $item)
         <li>
             <a wire:navigate href="{{ route($item->route_name) }}"
-                class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white {{ request()->routeIs($item->route_name) ? "bg-gray-100 dark:bg-gray-700 group" : "hover:bg-gray-100 dark:hover:bg-gray-700 group"}} ">
                 @if ($item?->icon != '')
                     {{ $item?->icon }}
                 @else

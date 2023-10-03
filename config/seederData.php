@@ -11,6 +11,7 @@ return [
     'admins' => [
         [
             'id' => 1,
+            'role_id' => 1,
             'name' => 'Super Admin / Developer',
             'email' => 'superadmin@laravel.com',
             'password' => $pasword,
@@ -39,12 +40,6 @@ return [
             'updated_at' => $now,
         ]
     ],
-
-    //adminRoleSeeder
-    'adminRole' => [[
-        'role_id'  => 1,
-        'admin_id'  => 1,
-    ]],
 
     //permissionRoleSeeder
     'permissionRole' => [[

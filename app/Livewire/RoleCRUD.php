@@ -35,9 +35,15 @@ class RoleCRUD extends Component implements HasForms, HasActions, HasTable
 
     public function mount()
     {
-        foreach (Permission::get(['id', 'name']) as $value) {
-            $this->allPermissions[$value->id] = $value->name;
+        $this->allPermissions = $this->getDropDownListFormat(Permission::get(['id', 'name']));
+    }
+
+    private function getDropDownListFormat($val) : array {
+        $returnVal = [];
+        foreach ($val as $value) {
+            $returnVal[$value->id] = $value->name;
         }
+        return $returnVal;
     }
     public function createRoleAction(): Action
     {
@@ -87,6 +93,18 @@ class RoleCRUD extends Component implements HasForms, HasActions, HasTable
                         ->action(function (Role $role, $data): void {
                             $role->permissions()->syncWithoutDetaching([$data['permission'] => ['accesses' => json_encode($data['accesses'])]]);
                         }),
+                        ActionsAction::make('deletePermissions')
+                        // ->fillForm(fn(Role $role) => $this->getDropDownListFormat($role->permissions()->get(['id', 'name'])))
+                        ->form([
+                            Select::make('permission')
+                                ->options(fn(Role $role) => $this->getDropDownListFormat($role->permissions()->get(['id', 'name'])))
+                                ->rules(['required', 'string']),
+                        ])
+                        ->requiresConfirmation()
+                        ->action(function (Role $role, $data): void {
+                            $role->permissions()->detach($data['permission']);
+                        }),
+
                     EditAction::make('edit')
                         ->form([
                             TextInput::make('name')

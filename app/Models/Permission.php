@@ -15,4 +15,8 @@ class Permission extends Model
         'route_name',
     ];
 
+    public function roles() :BelongsToMany
+    {
+        return $this->belongsToMany(Role::class, 'permission_role');
+    }
 }
