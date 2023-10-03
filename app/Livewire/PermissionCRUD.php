@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Permission;
 use App\Models\Role;
+use Closure;
 use Filament\Actions\Action;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -19,31 +20,32 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Support\Facades\Route;
 use Livewire\Component;
 
 class PermissionCRUD extends Component implements HasForms, HasActions, HasTable
 {
     use InteractsWithForms, InteractsWithActions, InteractsWithTable;
 
-    public function createRoleAction(): Action
+    public function createPermissionAction(): Action
     {
-        return Action::make('CreateRole')
+        return Action::make('CreatePermission')
             ->form([
                 TextInput::make('name')
-                    ->label('Role Name')
-                    ->rules(['required', 'string', 'unique:roles,name']),
-                // Select::make('permissions')
-                //     ->multiple()
-                //     ->options([
-                //         'tailwind' => 'Tailwind CSS',
-                //         'alpine' => 'Alpine.js',
-                //         'laravel' => 'Laravel',
-                //         'livewire' => 'Laravel Livewire',
-                //     ])
+                    ->label('Menu Name')
+                    ->rules(['required', 'string', 'unique:permissions,name']),
+                TextInput::make('route_name')
+                    ->label('Menu Route Name')
+                    ->rules(['required', 'string', 'unique:permissions,route_name', function () {
+                        return function (string $attribute, $value, Closure $fail) {
+                            if (!Route::has($value)) {
+                                $fail('The :attribute is not a valid route name in the application.');
+                            }
+                        };
+                    },]),
             ])
             ->action(function (array $data): void {
-                // dd($data);
-                Role::create($data);
+                Permission::create($data);
             });
     }
 
@@ -54,6 +56,7 @@ class PermissionCRUD extends Component implements HasForms, HasActions, HasTable
             ->columns([
                 TextColumn::make('id')->rowIndex()->sortable(),
                 TextColumn::make('name')->sortable()->searchable(isIndividual: true),
+                TextColumn::make('route_name')->sortable()->searchable(isIndividual: true),
                 TextColumn::make('roles.name')->badge(),
                 TextColumn::make('created_at')->label('Created At')->sortable()->since(),
                 TextColumn::make('updated_at')->sortable()->dateTime(),
@@ -66,7 +69,18 @@ class PermissionCRUD extends Component implements HasForms, HasActions, HasTable
                     ->form([
                         TextInput::make('name')
                             ->label('Permission Name')
-                            ->rules(['required', 'string', 'unique:permissions,name']),
+                            ->rules(['required', 'string'])
+                            ->unique('permissions','name',ignoreRecord: true),
+                        TextInput::make('route_name')
+                            ->label('Menu Route Name')
+                            ->rules(['required', 'string', function () {
+                                return function (string $attribute, $value, Closure $fail) {
+                                    if (!Route::has($value)) {
+                                        $fail('The :attribute is not a valid route name in the application.');
+                                    }
+                                };
+                            },])
+                            ->unique('permissions','route_name',ignoreRecord: true),
                     ]),
                 DeleteAction::make()
             ])

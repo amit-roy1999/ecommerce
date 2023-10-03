@@ -1,6 +1,6 @@
 <div>
     <div class="my-6">
-        {{ $this->createRoleAction }}
+        {{ $this->createPermissionAction }}
     </div>
 
     <div>

@@ -38,7 +38,8 @@ class RoleCRUD extends Component implements HasForms, HasActions, HasTable
         $this->allPermissions = $this->getDropDownListFormat(Permission::get(['id', 'name']));
     }
 
-    private function getDropDownListFormat($val) : array {
+    private function getDropDownListFormat($val): array
+    {
         $returnVal = [];
         foreach ($val as $value) {
             $returnVal[$value->id] = $value->name;
@@ -93,11 +94,10 @@ class RoleCRUD extends Component implements HasForms, HasActions, HasTable
                         ->action(function (Role $role, $data): void {
                             $role->permissions()->syncWithoutDetaching([$data['permission'] => ['accesses' => json_encode($data['accesses'])]]);
                         }),
-                        ActionsAction::make('deletePermissions')
-                        // ->fillForm(fn(Role $role) => $this->getDropDownListFormat($role->permissions()->get(['id', 'name'])))
+                    ActionsAction::make('deletePermissions')
                         ->form([
                             Select::make('permission')
-                                ->options(fn(Role $role) => $this->getDropDownListFormat($role->permissions()->get(['id', 'name'])))
+                                ->options(fn (Role $role) => $this->getDropDownListFormat($role->permissions()->get(['id', 'name'])))
                                 ->rules(['required', 'string']),
                         ])
                         ->requiresConfirmation()
@@ -109,7 +109,8 @@ class RoleCRUD extends Component implements HasForms, HasActions, HasTable
                         ->form([
                             TextInput::make('name')
                                 ->label('Role Name')
-                                ->rules(['required', 'string', 'unique:roles,name']),
+                                ->rules(['required', 'string'])
+                                ->unique('roles','name',ignoreRecord: true),
                         ]),
                     ViewAction::make()
                         ->form([
