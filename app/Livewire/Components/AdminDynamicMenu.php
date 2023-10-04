@@ -18,9 +18,13 @@ class AdminDynamicMenu extends Component
 
     public function render()
     {
+        $menus = auth()->guard('admin')->user()->role->permissions()->where('route_name', '*')->first() ?
+            Permission::whereNotIn('route_name', config('appConfig.hiddenRouteNamesForAdminMenu'))->get(['name', 'route_name']) :
+            auth()->guard('admin')->user()->role->permissions()->get(['name', 'route_name']);
+
         return view(
             'livewire.components.admin-dynamic-menu',
-            ['menu' => Permission::whereNotIn('route_name', config('appConfig.hiddenRouteNamesForAdminMenu'))->get(['name', 'route_name'])]
+            ['menu' => $menus]
         );
     }
 }

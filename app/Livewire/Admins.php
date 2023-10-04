@@ -76,7 +76,7 @@ class Admins extends Component implements HasForms, HasActions, HasTable
                 // ...
             ])
             ->actions([
-                EditAction::make('edit')
+                EditAction::make()
                     ->form([
                         TextInput::make('name')
                             ->label('Name')
@@ -84,8 +84,8 @@ class Admins extends Component implements HasForms, HasActions, HasTable
                         TextInput::make('email')
                             ->label('Email')
                             ->rules(['required', 'string', 'email'])
-                            ->unique('users', 'email', ignoreRecord: true),
-                        Select::make('role')
+                            ->unique('admins', 'email', ignoreRecord: true),
+                        Select::make('role_id')
                             ->label('Admin Role')
                             ->options(getSelectDropDownFormatForFilament($this->allRoles))
                             ->rules(['required', 'string']),

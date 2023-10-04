@@ -5,9 +5,10 @@ namespace App\Enum;
 enum ModulesAccessesEnum: int
 {
     case All = 0;
-    case Create = 1;
-    case Update = 2;
-    case Delete = 3;
+    case View = 1;
+    case Create = 2;
+    case Update = 3;
+    case Delete = 4;
 
     static function returnAllCaseJson() : string{
         $return = [];

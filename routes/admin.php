@@ -18,7 +18,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         Route::get('login', Login::class)->name('login');
     });
 
-    Route::group(['middleware' => 'adminAuth'], function () {
+    Route::group(['middleware' => ['adminAuth', 'adminAccess'] ], function () {
         Route::get('/dashbord', DashbordHome::class)->name('dashbord');
         Route::get('/role-crud', RoleCRUD::class)->name('roleCrud');
         Route::get('/permission-crud', PermissionCRUD::class)->name('permissionCrud');
