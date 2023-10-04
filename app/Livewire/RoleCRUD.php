@@ -35,17 +35,9 @@ class RoleCRUD extends Component implements HasForms, HasActions, HasTable
 
     public function mount()
     {
-        $this->allPermissions = $this->getDropDownListFormat(Permission::get(['id', 'name']));
+        $this->allPermissions = getSelectDropDownFormatForFilament(Permission::get(['id', 'name'])->toArray());
     }
 
-    private function getDropDownListFormat($val): array
-    {
-        $returnVal = [];
-        foreach ($val as $value) {
-            $returnVal[$value->id] = $value->name;
-        }
-        return $returnVal;
-    }
     public function createRoleAction(): Action
     {
         return Action::make('CreateRole')
@@ -97,7 +89,7 @@ class RoleCRUD extends Component implements HasForms, HasActions, HasTable
                     ActionsAction::make('deletePermissions')
                         ->form([
                             Select::make('permission')
-                                ->options(fn (Role $role) => $this->getDropDownListFormat($role->permissions()->get(['id', 'name'])))
+                                ->options(fn (Role $role) => getSelectDropDownFormatForFilament($role->permissions()->get(['id', 'name'])))
                                 ->rules(['required', 'string']),
                         ])
                         ->requiresConfirmation()
