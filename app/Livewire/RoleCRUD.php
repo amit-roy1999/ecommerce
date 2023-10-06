@@ -25,6 +25,7 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
 
 class RoleCRUD extends Component implements HasForms, HasActions, HasTable
@@ -36,6 +37,7 @@ class RoleCRUD extends Component implements HasForms, HasActions, HasTable
     public function mount()
     {
         $this->allPermissions = getSelectDropDownFormatForFilament(Permission::get(['id', 'name'])->toArray());
+        // dd(Gate::inspect('update', Role::class));
     }
 
     public function createRoleAction(): Action
@@ -102,7 +104,7 @@ class RoleCRUD extends Component implements HasForms, HasActions, HasTable
                             TextInput::make('name')
                                 ->label('Role Name')
                                 ->rules(['required', 'string'])
-                                ->unique('roles','name',ignoreRecord: true),
+                                ->unique('roles', 'name', ignoreRecord: true),
                         ]),
                     ViewAction::make()
                         ->form([
