@@ -24,13 +24,15 @@ use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Support\Facades\Route;
 use Livewire\Component;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Users extends Component implements HasForms, HasActions, HasTable
 {
-    use InteractsWithForms, InteractsWithActions, InteractsWithTable;
+    use InteractsWithForms, InteractsWithActions, InteractsWithTable, AuthorizesRequests;
 
     public function table(Table $table): Table
     {
+
         return $table
             ->query(User::query())
             ->columns([
