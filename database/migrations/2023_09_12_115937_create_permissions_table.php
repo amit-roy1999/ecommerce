@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('route_name')->unique();
+            $table->string('table_name');
             $table->timestamps();
         });
     }

@@ -36,6 +36,7 @@ return [
             'id' => 1,
             'name' => 'super-admin-dev',
             'route_name' => '*',
+            'table_name' => '*',
             'created_at' => $now,
             'updated_at' => $now,
         ]

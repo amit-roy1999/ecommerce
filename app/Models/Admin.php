@@ -46,8 +46,13 @@ class Admin extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function role() : BelongsTo
+    public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function isSuperAdmin(): bool
+    {
+
     }
 }

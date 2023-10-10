@@ -112,7 +112,7 @@ class RoleCRUD extends Component implements HasForms, HasActions, HasTable
                                 ->label('Role Name')
                                 ->rules(['required', 'string', 'unique:roles,name']),
                         ]),
-                    DeleteAction::make()
+                    DeleteAction::make()->visible(auth()->guard('admin')->user()->can('delete'))
                 ])
 
             ])

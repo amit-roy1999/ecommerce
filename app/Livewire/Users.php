@@ -22,17 +22,15 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
-use Illuminate\Support\Facades\Route;
 use Livewire\Component;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Users extends Component implements HasForms, HasActions, HasTable
 {
-    use InteractsWithForms, InteractsWithActions, InteractsWithTable, AuthorizesRequests;
+    use InteractsWithForms, InteractsWithActions, InteractsWithTable;
 
     public function table(Table $table): Table
     {
-
+        // dd(auth()->guard('admin')->user()->can('delete', User::whereId(4)->first()));
         return $table
             ->query(User::query())
             ->columns([
@@ -63,7 +61,7 @@ class Users extends Component implements HasForms, HasActions, HasTable
                         TextInput::make('email')
                             ->label('Email'),
                     ]),
-                DeleteAction::make()
+                DeleteAction::make()->visible(fn(User $user) => auth()->guard('admin')->user()->can('delete', $user))
             ])
             ->bulkActions([
                 BulkActionGroup::make([

@@ -2,13 +2,13 @@
 
 namespace App\Enum;
 
-enum ModulesAccessesEnum: int
+enum ModulesAccessesEnum: string
 {
-    case All = 0;
-    case View = 1;
-    case Create = 2;
-    case Update = 3;
-    case Delete = 4;
+    case All = "0";
+    case View = "1";
+    case Create = "2";
+    case Update = "3";
+    case Delete = "4";
 
     static function returnAllCaseJson() : string{
         $return = [];

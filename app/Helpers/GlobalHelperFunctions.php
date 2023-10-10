@@ -9,7 +9,7 @@ function getSelectDropDownFormatForFilament(array $val): array
     return $returnVal;
 }
 
-function doesUserHavePermissionForThisAction(): bool
+function s(): bool
 {
     return false;
 }
