@@ -15,7 +15,11 @@ class CheckIfAdminCanAccessCurrentModule
      */
     public function handle(Request $request, Closure $next): Response
     {
-        foreach (auth()->guard('admin')->user()->role->permissions()->get()->toArray() as $permission) {
+        $permissions = auth()->guard('admin')->user()->role->permissions()->get()->toArray();
+        if(!count($permissions)){
+            return redirect()->route('adminWelcome');
+        }
+        foreach ($permissions as $permission) {
             if ($permission['route_name'] === "*" || $request->routeIs($permission['route_name'])) {
                 return $next($request);
             }

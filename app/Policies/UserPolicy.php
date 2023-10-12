@@ -10,6 +10,16 @@ use Illuminate\Auth\Access\Response;
 class UserPolicy
 {
     /**
+     * Perform pre-authorization checks.
+     */
+    public function before(Admin $admin): bool|null
+    {
+        if ($admin->whereId($admin->id)->whereHas('role.permissions', fn ($q) => $q->where('route_name', '*'))->first()) {
+            return true;
+        }
+        return null;
+    }
+    /**
      * Determine whether the user can view any models.
      */
     public function viewAny(Admin $admin): bool
@@ -30,7 +40,12 @@ class UserPolicy
      */
     public function create(Admin $admin): bool
     {
-        //
+        return $admin->whereHas(
+            'role.permissions',
+            function ($q) {
+                $q->where('table_name', 'users')->whereJsonContains('accesses', ModulesAccessesEnum::Create->value);
+            }
+        )->first() ? true : false;
     }
 
     /**
@@ -38,7 +53,12 @@ class UserPolicy
      */
     public function update(Admin $admin, User $model): bool
     {
-        //
+        return $admin->whereHas(
+            'role.permissions',
+            function ($q) {
+                $q->where('table_name', 'users')->whereJsonContains('accesses', ModulesAccessesEnum::Update->value);
+            }
+        )->first() ? true : false;
     }
 
     /**
@@ -46,12 +66,12 @@ class UserPolicy
      */
     public function delete(Admin $admin, User $model): bool
     {
-        // return true;
-        if($admin->isSuperAdmin()){
-            return true;
-        }
-        dd($model);
-        return dd($admin->whereHas('role.permissions', fn($q) => $q->whereJsonContains('accesses', [ModulesAccessesEnum::View->value]))->first());
+        return $admin->whereHas(
+            'role.permissions',
+            function ($q) {
+                $q->where('table_name', 'users')->whereJsonContains('accesses', ModulesAccessesEnum::Delete->value);
+            }
+        )->first() ? true : false;
     }
 
     /**

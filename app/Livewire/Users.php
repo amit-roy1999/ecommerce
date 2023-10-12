@@ -28,9 +28,25 @@ class Users extends Component implements HasForms, HasActions, HasTable
 {
     use InteractsWithForms, InteractsWithActions, InteractsWithTable;
 
+    public function createUserAction(): Action
+    {
+        return Action::make('CreateUser')
+            ->form([
+                TextInput::make('name')
+                    ->label('Name')
+                    ->rules(['required', 'string']),
+                TextInput::make('email')
+                    ->label('Email')
+                    ->rules(['required', 'string', 'email'])
+                    ->unique('users', 'email'),
+            ])
+            ->action(function (array $data): void {
+                User::create($data);
+            })->visible(auth()->guard('admin')->user()->can('create'));
+    }
+
     public function table(Table $table): Table
     {
-        // dd(auth()->guard('admin')->user()->can('delete', User::whereId(4)->first()));
         return $table
             ->query(User::query())
             ->columns([
@@ -53,7 +69,7 @@ class Users extends Component implements HasForms, HasActions, HasTable
                             ->label('Email')
                             ->rules(['required', 'string', 'email'])
                             ->unique('users', 'email', ignoreRecord: true),
-                    ]),
+                    ])->visible(fn (User $user) => auth()->guard('admin')->user()->can('update', $user)),
                 ViewAction::make()
                     ->form([
                         TextInput::make('name')
@@ -61,11 +77,11 @@ class Users extends Component implements HasForms, HasActions, HasTable
                         TextInput::make('email')
                             ->label('Email'),
                     ]),
-                DeleteAction::make()->visible(fn(User $user) => auth()->guard('admin')->user()->can('delete', $user))
+                DeleteAction::make()->visible(fn (User $user) => auth()->guard('admin')->user()->can('delete', $user))
             ])
             ->bulkActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()->visible(fn (User $user) => auth()->guard('admin')->user()->can('delete', $user)),
                 ]),
             ]);
     }

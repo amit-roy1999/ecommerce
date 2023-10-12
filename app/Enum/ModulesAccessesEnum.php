@@ -4,11 +4,9 @@ namespace App\Enum;
 
 enum ModulesAccessesEnum: string
 {
-    case All = "0";
-    case View = "1";
-    case Create = "2";
-    case Update = "3";
-    case Delete = "4";
+    case Create = "1";
+    case Update = "2";
+    case Delete = "3";
 
     static function returnAllCaseJson() : string{
         $return = [];
@@ -21,8 +19,8 @@ enum ModulesAccessesEnum: string
     static function returnAllCaseforDropdown() : array{
         $return = [];
         foreach (ModulesAccessesEnum::cases() as $value) {
-            $return[] = [$value->value => $value->name];
+            $return[$value->value] = $value->name;
         }
-        return collect($return)->flatten()->toArray();
+        return $return;
     }
 }

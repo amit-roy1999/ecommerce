@@ -2,6 +2,7 @@
 
 use App\Livewire\{
     Admins,
+    AdminWelcomePage,
     Users,
     DashbordHome,
     Login,
@@ -26,3 +27,5 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         Route::get('/admins', Admins::class)->name('admins');
     });
 });
+
+Route::get('/admin/welcome', AdminWelcomePage::class)->name('adminWelcome');

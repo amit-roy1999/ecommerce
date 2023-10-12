@@ -13,6 +13,7 @@ class Permission extends Model
     protected $fillable = [
         'name',
         'route_name',
+        'table_name',
     ];
 
     public function roles() :BelongsToMany

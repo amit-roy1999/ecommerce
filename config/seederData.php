@@ -46,7 +46,7 @@ return [
     'permissionRole' => [[
         'role_id'  => 1,
         'permission_id'  => 1,
-        'accesses' => json_encode([ModulesAccessesEnum::All], true)
+        'accesses' => json_encode([ModulesAccessesEnum::Create,ModulesAccessesEnum::Update,ModulesAccessesEnum::Delete], true)
     ]],
 
 ];

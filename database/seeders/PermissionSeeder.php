@@ -24,7 +24,7 @@ class PermissionSeeder extends Seeder
                 $allAdminRoutes[] = [
                     'name' => str_replace('admin.', '', $value->action['as']),
                     'route_name' => $value->action['as'],
-                    'table_name' => $value->action['as'],
+                    'table_name' => str_replace('admin.', '',$value->action['as']),
                     'created_at' => $now,
                     'updated_at' => $now,
                 ];

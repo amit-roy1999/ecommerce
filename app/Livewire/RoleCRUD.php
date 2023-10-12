@@ -83,7 +83,7 @@ class RoleCRUD extends Component implements HasForms, HasActions, HasTable
                             Select::make('accesses')
                                 ->multiple()
                                 ->options(ModulesAccessesEnum::returnAllCaseforDropdown())
-                                ->rules(['required', 'array'])
+                                ->rules(['array'])
                         ])
                         ->action(function (Role $role, $data): void {
                             $role->permissions()->syncWithoutDetaching([$data['permission'] => ['accesses' => json_encode($data['accesses'])]]);
@@ -91,7 +91,7 @@ class RoleCRUD extends Component implements HasForms, HasActions, HasTable
                     ActionsAction::make('deletePermissions')
                         ->form([
                             Select::make('permission')
-                                ->options(fn (Role $role) => getSelectDropDownFormatForFilament($role->permissions()->get(['id', 'name'])))
+                                ->options(fn (Role $role) => getSelectDropDownFormatForFilament($role->permissions()->get(['id', 'name'])->toArray()))
                                 ->rules(['required', 'string']),
                         ])
                         ->requiresConfirmation()
