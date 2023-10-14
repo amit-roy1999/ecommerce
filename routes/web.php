@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::redirect('/', 'admin/login');
-
+Route::get('loadtest', fn() => App\Models\User::get()->toJson());
 Route::get('test', function() {
    dd(App\Models\User::whereId(7)->delete());
 //    dd(App\Models\Role::with('permissions')->get()->toArray()[0]['permissions'][0]['pivot']['accesses']);

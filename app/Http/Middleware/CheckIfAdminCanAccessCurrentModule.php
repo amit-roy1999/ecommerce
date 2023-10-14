@@ -15,15 +15,19 @@ class CheckIfAdminCanAccessCurrentModule
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $permissions = auth()->guard('admin')->user()->role->permissions()->get()->toArray();
-        if(!count($permissions)){
+        $hasPermission = auth()->guard('admin')->user()->role->permissions();
+        $currentRouteIsValid = $hasPermission->where('route_name', "*")->orWhere('route_name', $request->route()->getName())->first();
+
+        if ($currentRouteIsValid) {
+            return $next($request);
+        }
+        if ($hasPermission->get()->count() && !isset($currentRouteIsValid)) {
+            return redirect()->route($hasPermission->first()->route_name);
+        }
+        if (!$hasPermission->get()->count()) {
             return redirect()->route('adminWelcome');
         }
-        foreach ($permissions as $permission) {
-            if ($permission['route_name'] === "*" || $request->routeIs($permission['route_name'])) {
-                return $next($request);
-            }
-        }
+
         abort(403);
     }
 }

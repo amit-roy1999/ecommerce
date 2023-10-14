@@ -42,7 +42,7 @@ class Users extends Component implements HasForms, HasActions, HasTable
             ])
             ->action(function (array $data): void {
                 User::create($data);
-            })->visible(auth()->guard('admin')->user()->can('create'));
+            })->visible(auth()->guard('admin')->user()->can('create', User::class));
     }
 
     public function table(Table $table): Table

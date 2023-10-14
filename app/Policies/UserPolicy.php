@@ -40,12 +40,9 @@ class UserPolicy
      */
     public function create(Admin $admin): bool
     {
-        return $admin->whereHas(
-            'role.permissions',
-            function ($q) {
-                $q->where('table_name', 'users')->whereJsonContains('accesses', ModulesAccessesEnum::Create->value);
-            }
-        )->first() ? true : false;
+        return $admin->whereHas('role.permissions', function ($q) {
+            $q->where('table_name', 'users')->whereJsonContains('accesses', ModulesAccessesEnum::Create->value);
+        })->first() ? true : false;
     }
 
     /**
