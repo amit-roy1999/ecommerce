@@ -14,26 +14,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call([
+            RoleSeeder::class,
+            AdminSeeder::class,
+            PermissionSeeder::class,
+            PermissionRoleSeeder::class,
+        ]);
+        \App\Models\Category::factory(10)->parentId(false)->create();
+        \App\Models\Category::factory(30)->parentId([1, 10])->create();
+        \App\Models\Category::factory(100)->parentId([11, 40])->create();
+
         \App\Models\User::factory(100)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-
-        // $this->call(AdminSeeder::class);
-        // $this->call(RoleSeeder::class);
-        // $this->call(PermissionSeeder::class);
-        // $this->call(PermissionRoleSeeder::class);
-        // $this->call(AdminRoleSeeder::class);
-
-        $this->call(
-            [
-                RoleSeeder::class,
-                AdminSeeder::class,
-                PermissionSeeder::class,
-                PermissionRoleSeeder::class,
-            ]
-        );
     }
 }
