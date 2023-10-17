@@ -2,15 +2,13 @@
 
 namespace App\Policies;
 
-use App\Enum\ModulesAccessesEnum;
 use App\Models\Admin;
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class RolePolicy
+class AdminPolicy
 {
-     /**
+    /**
      * Perform pre-authorization checks.
      */
     public function before(Admin $admin): bool|null
@@ -23,7 +21,7 @@ class RolePolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(Admin $admin): bool
+    public function viewAny(User $user): bool
     {
         //
     }
@@ -31,14 +29,11 @@ class RolePolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(Admin $admin, Role $role): bool
+    public function view(User $user, Admin $admin): bool
     {
         //
     }
 
-    /**
-     * Determine whether the user can create models.
-     */
     public function create(Admin $admin): bool
     {
         return $admin->whereHas('role.permissions', function ($q) {
@@ -49,7 +44,7 @@ class RolePolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(Admin $admin, Role $role): bool
+    public function update(Admin $admin, Admin $adminEntry): bool
     {
         return $admin->whereHas(
             'role.permissions',
@@ -62,7 +57,7 @@ class RolePolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(Admin $admin, Role $role): bool
+    public function delete(Admin $admin, Admin $adminEntry): bool
     {
         return $admin->whereHas(
             'role.permissions',
@@ -75,7 +70,7 @@ class RolePolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(Admin $admin, Role $role): bool
+    public function restore(User $user, Admin $admin): bool
     {
         //
     }
@@ -83,7 +78,7 @@ class RolePolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(Admin $admin, Role $role): bool
+    public function forceDelete(User $user, Admin $admin): bool
     {
         //
     }

@@ -4,11 +4,11 @@ namespace App\Policies;
 
 use App\Enum\ModulesAccessesEnum;
 use App\Models\Admin;
-use App\Models\Role;
+use App\Models\Permission;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class RolePolicy
+class PermissionPolicy
 {
      /**
      * Perform pre-authorization checks.
@@ -31,7 +31,7 @@ class RolePolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(Admin $admin, Role $role): bool
+    public function view(Admin $admin, Permission $permission): bool
     {
         //
     }
@@ -49,7 +49,7 @@ class RolePolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(Admin $admin, Role $role): bool
+    public function update(Admin $admin, Permission $permission): bool
     {
         return $admin->whereHas(
             'role.permissions',
@@ -62,7 +62,7 @@ class RolePolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(Admin $admin, Role $role): bool
+    public function delete(Admin $admin, Permission $permission): bool
     {
         return $admin->whereHas(
             'role.permissions',
@@ -75,7 +75,7 @@ class RolePolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(Admin $admin, Role $role): bool
+    public function restore(Admin $admin, Permission $permission): bool
     {
         //
     }
@@ -83,7 +83,7 @@ class RolePolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(Admin $admin, Role $role): bool
+    public function forceDelete(Admin $admin, Permission $permission): bool
     {
         //
     }
