@@ -29,7 +29,7 @@ class CategoryFactory extends Factory
     {
         return $this->state(function (array $attributes) use ($parentId) {
             if ($parentId) {
-                $name = 'ChildCategory' . rand(11111, 99999);
+                $name = 'ChildCategory' . rand(11111, 9999999);
                 return [
                     'parent_id' => rand($parentId[0], $parentId[1]),
                     'name' => $name,

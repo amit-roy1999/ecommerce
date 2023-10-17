@@ -10,6 +10,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Illuminate\Contracts\View\View;
 use Filament\Actions\Concerns\InteractsWithActions;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Set;
 use Filament\Tables\Actions\BulkActionGroup;
@@ -17,6 +18,7 @@ use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Table;
@@ -43,11 +45,15 @@ class Categories extends Component implements HasForms, HasActions, HasTable
                 TextInput::make('slug')
                     ->label('Slug')
                     ->rules(['required', 'string', 'unique:categories,slug']),
+                FileUpload::make('image')
+                    ->image()
+                    ->imageEditor()
+                    ->rules(['required', 'image']),
 
             ])
             ->action(function (array $data): void {
                 Category::create($data);
-            })->visible(auth()->guard('admin')->user()->can('create', User::class));
+            })->visible(auth()->guard('admin')->user()->can('create', Category::class));
     }
 
     public function table(Table $table): Table
@@ -56,6 +62,7 @@ class Categories extends Component implements HasForms, HasActions, HasTable
             ->query(Category::query())
             ->columns([
                 TextColumn::make('id')->rowIndex()->sortable(),
+                ImageColumn::make('image')->circular(),
                 TextColumn::make('name')->sortable()->searchable(isIndividual: true),
                 TextColumn::make('slug')->sortable()->searchable(isIndividual: true),
                 TextColumn::make('childCategories.name')->badge(),
@@ -70,24 +77,31 @@ class Categories extends Component implements HasForms, HasActions, HasTable
                     ->form([
                         TextInput::make('name')
                             ->label('Name')
-                            ->rules(['required', 'string']),
-                        TextInput::make('email')
-                            ->label('Email')
-                            ->rules(['required', 'string', 'email'])
-                            ->unique('users', 'email', ignoreRecord: true),
-                    ])->visible(fn (User $user) => auth()->guard('admin')->user()->can('update', $user)),
+                            ->rules(['required', 'string'])
+                            ->unique('categories', 'name', ignoreRecord: true),
+                        TextInput::make('slug')
+                            ->label('Slug')
+                            ->rules(['required', 'string'])
+                            ->unique('categories', 'slug', ignoreRecord: true),
+                        FileUpload::make('image')
+                            ->image()
+                            ->imageEditor()
+                            ->rules(['required', 'image']),
+                    ])->visible(fn (Category $category) => auth()->guard('admin')->user()->can('update', $category)),
                 ViewAction::make()
                     ->form([
                         TextInput::make('name')
                             ->label('Name'),
                         TextInput::make('email')
                             ->label('Email'),
+                        FileUpload::make('image')
+                            ->image()
                     ]),
-                DeleteAction::make()->visible(fn (User $user) => auth()->guard('admin')->user()->can('delete', $user))
+                DeleteAction::make()->visible(fn (Category $category) => auth()->guard('admin')->user()->can('delete', $category))
             ])
             ->bulkActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make()->visible(fn (User $user) => auth()->guard('admin')->user()->can('delete', $user)),
+                    DeleteBulkAction::make()->visible(fn (Category $category) => auth()->guard('admin')->user()->can('delete', $category)),
                 ]),
             ]);
     }
