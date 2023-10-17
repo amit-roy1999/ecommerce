@@ -37,7 +37,6 @@ class RoleCRUD extends Component implements HasForms, HasActions, HasTable
     public function mount()
     {
         $this->allPermissions = getSelectDropDownFormatForFilament(Permission::get(['id', 'name'])->toArray());
-        // dd(Gate::inspect('update', Role::class));
     }
 
     public function createRoleAction(): Action
@@ -50,7 +49,7 @@ class RoleCRUD extends Component implements HasForms, HasActions, HasTable
             ])
             ->action(function (array $data): void {
                 Role::create($data);
-            });
+            })->visible(auth()->guard('admin')->user()->can('create', Role::class));
     }
 
     public function table(Table $table): Table
@@ -87,7 +86,7 @@ class RoleCRUD extends Component implements HasForms, HasActions, HasTable
                         ])
                         ->action(function (Role $role, $data): void {
                             $role->permissions()->syncWithoutDetaching([$data['permission'] => ['accesses' => json_encode($data['accesses'])]]);
-                        }),
+                        })->visible(auth()->guard('admin')->user()->can('create', Permission::class)),
                     ActionsAction::make('deletePermissions')
                         ->form([
                             Select::make('permission')
@@ -97,7 +96,7 @@ class RoleCRUD extends Component implements HasForms, HasActions, HasTable
                         ->requiresConfirmation()
                         ->action(function (Role $role, $data): void {
                             $role->permissions()->detach($data['permission']);
-                        }),
+                        })->visible(fn (Role $role) => auth()->guard('admin')->user()->can('delete', $role->permissions()->first())),
 
                     EditAction::make('edit')
                         ->form([
@@ -105,14 +104,14 @@ class RoleCRUD extends Component implements HasForms, HasActions, HasTable
                                 ->label('Role Name')
                                 ->rules(['required', 'string'])
                                 ->unique('roles', 'name', ignoreRecord: true),
-                        ]),
+                        ])->visible(fn (Role $role) => auth()->guard('admin')->user()->can('update', $role)),
                     ViewAction::make()
                         ->form([
                             TextInput::make('name')
                                 ->label('Role Name')
                                 ->rules(['required', 'string', 'unique:roles,name']),
                         ]),
-                    DeleteAction::make()->visible(auth()->guard('admin')->user()->can('delete'))
+                    DeleteAction::make()->visible(fn (Role $role) => auth()->guard('admin')->user()->can('delete', $role))
                 ])
 
             ])

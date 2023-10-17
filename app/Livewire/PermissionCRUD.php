@@ -46,7 +46,7 @@ class PermissionCRUD extends Component implements HasForms, HasActions, HasTable
             ])
             ->action(function (array $data): void {
                 Permission::create($data);
-            });
+            })->visible(auth()->guard('admin')->user()->can('create', Permission::class));
     }
 
     public function table(Table $table): Table
@@ -71,7 +71,7 @@ class PermissionCRUD extends Component implements HasForms, HasActions, HasTable
                         TextInput::make('name')
                             ->label('Permission Name')
                             ->rules(['required', 'string'])
-                            ->unique('permissions','name',ignoreRecord: true),
+                            ->unique('permissions', 'name', ignoreRecord: true),
                         TextInput::make('route_name')
                             ->label('Menu Route Name')
                             ->rules(['required', 'string', function () {
@@ -81,13 +81,13 @@ class PermissionCRUD extends Component implements HasForms, HasActions, HasTable
                                     }
                                 };
                             },])
-                            ->unique('permissions','route_name',ignoreRecord: true),
-                    ]),
-                DeleteAction::make()
+                            ->unique('permissions', 'route_name', ignoreRecord: true),
+                    ])->visible(fn (Permission $permission) => auth()->guard('admin')->user()->can('update', $permission)),
+                DeleteAction::make()->visible(fn (Permission $permission) => auth()->guard('admin')->user()->can('delete', $permission)),
             ])
             ->bulkActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()->visible(fn (Permission $permission) => auth()->guard('admin')->user()->can('delete', $permission)),
                 ]),
             ]);
     }
