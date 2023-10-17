@@ -38,7 +38,7 @@ class AdminPolicy
     public function create(Admin $admin): bool
     {
         return $admin->whereHas('role.permissions', function ($q) {
-            $q->where('table_name', 'users')->whereJsonContains('accesses', ModulesAccessesEnum::Create->value);
+            $q->where('table_name', 'admins')->whereJsonContains('accesses', ModulesAccessesEnum::Create->value);
         })->first() ? true : false;
     }
 
@@ -50,7 +50,7 @@ class AdminPolicy
         return $admin->whereHas(
             'role.permissions',
             function ($q) {
-                $q->where('table_name', 'users')->whereJsonContains('accesses', ModulesAccessesEnum::Update->value);
+                $q->where('table_name', 'admins')->whereJsonContains('accesses', ModulesAccessesEnum::Update->value);
             }
         )->first() ? true : false;
     }
@@ -63,7 +63,7 @@ class AdminPolicy
         return $admin->whereHas(
             'role.permissions',
             function ($q) {
-                $q->where('table_name', 'users')->whereJsonContains('accesses', ModulesAccessesEnum::Delete->value);
+                $q->where('table_name', 'admins')->whereJsonContains('accesses', ModulesAccessesEnum::Delete->value);
             }
         )->first() ? true : false;
     }

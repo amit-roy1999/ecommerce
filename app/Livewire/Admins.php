@@ -57,7 +57,7 @@ class Admins extends Component implements HasForms, HasActions, HasTable
             ])
             ->action(function (array $data): void {
                 Admin::create($data);
-            });
+            })->visible(auth()->guard('admin')->user()->can('create', Admin::class));
     }
 
     public function table(Table $table): Table
@@ -92,7 +92,7 @@ class Admins extends Component implements HasForms, HasActions, HasTable
                             ->label('Admin Role')
                             ->options(getSelectDropDownFormatForFilament($this->allRoles))
                             ->rules(['required', 'integer']),
-                    ]),
+                    ])->visible(fn (Admin $admin) => auth()->guard('admin')->user()->can('update', $admin)),
                 ViewAction::make()
                     ->form([
                         TextInput::make('name')
@@ -103,11 +103,11 @@ class Admins extends Component implements HasForms, HasActions, HasTable
                             ->label('Admin Role')
                             ->options(getSelectDropDownFormatForFilament($this->allRoles)),
                     ]),
-                DeleteAction::make()
+                DeleteAction::make()->visible(fn (Admin $admin) => auth()->guard('admin')->user()->can('delete', $admin))
             ])
             ->bulkActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()->visible(fn (Admin $admin) => auth()->guard('admin')->user()->can('delete', $admin)),
                 ]),
             ]);
     }
