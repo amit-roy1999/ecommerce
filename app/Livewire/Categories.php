@@ -3,10 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Category;
-use App\Models\Permission;
-use App\Models\Role;
 use App\Models\User;
-use Closure;
 use Filament\Actions\Action;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Concerns\InteractsWithForms;
