@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enum\ModulesAccessesEnum;
 use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
