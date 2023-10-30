@@ -31,6 +31,8 @@ class Categories extends Component implements HasForms, HasActions, HasTable
 {
     use InteractsWithForms, InteractsWithActions, InteractsWithTable;
 
+    public string $customErrorMessage  = '';
+
     public function createCategoryAction(): Action
     {
         return Action::make('CreateCategory')
@@ -138,10 +140,7 @@ class Categories extends Component implements HasForms, HasActions, HasTable
                         try {
                             $category->delete();
                         } catch (\Illuminate\Database\QueryException $th) {
-                            return $th->getMessage();
-                            dd('qe',$th);
-                        } catch (\Throwable $th) {
-                            dd($th);
+                            return $this->customErrorMessage = 'Can not delete this category without deleteing all the child categories under it.';
                         }
                     })
                     // ->failureNotificationMessage('User deleted')
