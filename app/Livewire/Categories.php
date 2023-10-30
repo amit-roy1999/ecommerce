@@ -132,15 +132,19 @@ class Categories extends Component implements HasForms, HasActions, HasTable
                             ->image()
                     ]),
                 DeleteAction::make()
-                    ->modalDescription('Deleteing this category will delete all the category under this category and their images')
-                    // ->action(function (Category $category) {
-                    //     deleteImageIfExists('public', $category->image);
-                    //     try {
-                    //         $category->delete();
-                    //     } catch (\Throwable $th) {
-                    //         dd($th);
-                    //     }
-                    // })
+                    // ->modalDescription('Deleteing this category will delete all the category under this category and their images')
+                    ->action(function (Category $category) {
+                        deleteImageIfExists('public', $category->image);
+                        try {
+                            $category->delete();
+                        } catch (\Illuminate\Database\QueryException $th) {
+                            return $th->getMessage();
+                            dd('qe',$th);
+                        } catch (\Throwable $th) {
+                            dd($th);
+                        }
+                    })
+                    // ->failureNotificationMessage('User deleted')
                     ->visible(fn (Category $category) => auth()->guard('admin')->user()->can('delete', $category))
             ])
             ->bulkActions([
