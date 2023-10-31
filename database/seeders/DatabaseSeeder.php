@@ -25,5 +25,6 @@ class DatabaseSeeder extends Seeder
         \App\Models\Category::factory(100)->parentId([11, 40])->create();
         \App\Models\Brand::factory(10)->create();
         \App\Models\User::factory(100)->create();
+        \App\Models\Product::factory(100)->create();
     }
 }

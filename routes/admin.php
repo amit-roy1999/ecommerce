@@ -12,6 +12,7 @@
 // };
 
 use App\Livewire\Brands;
+use App\Livewire\Products;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['namespace' => 'App\Livewire','prefix' => 'admin', 'as' => 'admin.'], function () {
@@ -29,6 +30,7 @@ Route::group(['namespace' => 'App\Livewire','prefix' => 'admin', 'as' => 'admin.
         Route::get('/users', Users::class)->name('users');
         Route::get('/categories', Categories::class)->name('categories');
         Route::get('/brands', Brands::class)->name('brands');
+        Route::get('/products', Products::class)->name('products');
     });
 });
 

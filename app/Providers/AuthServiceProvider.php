@@ -5,11 +5,17 @@ namespace App\Providers;
 // use Illuminate\Support\Facades\Gate;
 
 use App\Models\Admin;
+use App\Models\Brand;
+use App\Models\Category;
 use App\Models\Permission;
+use App\Models\Product;
 use App\Models\Role;
 use App\Models\User;
 use App\Policies\AdminPolicy;
+use App\Policies\BrandPolicy;
+use App\Policies\CategoryPolicy;
 use App\Policies\PermissionPolicy;
+use App\Policies\ProductPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -26,6 +32,9 @@ class AuthServiceProvider extends ServiceProvider
         Role::class => RolePolicy::class,
         Permission::class => PermissionPolicy::class,
         Admin::class => AdminPolicy::class,
+        Category::class => CategoryPolicy::class,
+        Brand::class => BrandPolicy::class,
+        Product::class => ProductPolicy::class,
     ];
 
     /**
