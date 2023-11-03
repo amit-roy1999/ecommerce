@@ -34,4 +34,5 @@
         {{ $this->table }}
     </div>
 
+
 </div>

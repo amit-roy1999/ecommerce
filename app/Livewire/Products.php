@@ -5,6 +5,8 @@ namespace App\Livewire;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\SpecificationName;
+use App\Models\SpecificationUnit;
 use App\Models\User;
 use Filament\Actions\Action;
 use Filament\Actions\Contracts\HasActions;
@@ -13,6 +15,7 @@ use Filament\Forms\Contracts\HasForms;
 use Illuminate\Contracts\View\View;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -40,6 +43,7 @@ class Products extends Component implements HasForms, HasActions, HasTable
     public function createProductAction(): Action
     {
         return Action::make('CreateProduct')
+            // ->modalWidth('screen')
             ->steps([
                 Step::make('Product Details')
                     ->description('Give the Product Details')
@@ -52,46 +56,80 @@ class Products extends Component implements HasForms, HasActions, HasTable
                                     $set('slug', (string)str($state)->slug());
                                 }
                             })
-                            ->rules(['required', 'string', 'unique:products,name']),
+                            ->rules(['required', 'string', 'unique:products,name'])
+                            ->columnSpan(3),
                         TextInput::make('slug')
                             ->label('Slug')
+                            ->columnSpan(3)
                             ->rules(['required', 'string', 'unique:products,slug']),
                         Select::make('category_id')
                             ->searchable()
                             ->getSearchResultsUsing(fn (string $search): array => Category::where('name', 'like', "%{$search}%")->limit(50)->pluck('name', 'id')->toArray())
-                            ->getOptionLabelUsing(fn ($value): ?string => Category::find($value)?->name)
+                            ->options(Category::pluck('name', 'id')->toArray())
+                            ->columnSpan(3)
                             ->rules(['required', 'integer']),
                         Select::make('brand_id')
                             ->searchable()
                             ->getSearchResultsUsing(fn (string $search): array => Brand::where('name', 'like', "%{$search}%")->limit(50)->pluck('name', 'id')->toArray())
-                            ->getOptionLabelUsing(fn ($value): ?string => Brand::find($value)?->name)
+                            ->options(Brand::pluck('name', 'id')->toArray())
+                            ->columnSpan(3)
                             ->rules(['required', 'integer']),
                         TextInput::make('price')
                             ->label('Price')
                             ->numeric()
-                            ->rules(['required', 'integer']),
+                            ->step(0.01)
+                            ->columnSpan(2)
+                            ->rules(['required', 'numeric', 'between:1,999999999999.99']),
                         TextInput::make('avalebel_discount_in_percentage')
                             ->label('Discount')
-                            ->numeric()
                             ->suffix('%')
-                            ->rules(['required', 'integer', 'max:100']),
-                        RichEditor::make('description')->columnSpan(2),
+                            ->numeric()
+                            ->step(0.01)
+                            ->columnSpan(2)
+                            ->rules(['required', 'numeric', 'between:1,99.99']),
+                        TextInput::make('display_price')
+                            ->label('Display Price')
+                            ->disabled()
+                            ->columnSpan(2),
+                        RichEditor::make('description')->columnSpan(6),
                     ])
-                    ->columns(2),
+                    ->columns(6),
+                Step::make('Product Specifications')
+                    ->description('Give the Product Specification Details')
+                    ->schema([
+                        Repeater::make('product_specifications')
+                            ->schema([
+                                Select::make('specification_name_id')
+                                    ->label('specification name')
+                                    ->searchable()
+                                    ->getSearchResultsUsing(fn (string $search): array => SpecificationName::where('name', 'like', "%{$search}%")->limit(50)->pluck('name', 'id')->toArray())
+                                    ->options(SpecificationName::pluck('name', 'id')->toArray())
+                                    ->rules(['required', 'integer']),
+                                Select::make('specification_unit_id')
+                                    ->label('specification unit')
+                                    ->searchable()
+                                    ->getSearchResultsUsing(fn (string $search): array => SpecificationUnit::where('name', 'like', "%{$search}%")->limit(50)->pluck('name', 'id')->toArray())
+                                    ->options(SpecificationUnit::pluck('name', 'id')->toArray())
+                                    ->nullable()
+                                    ->rules(['nullabel', 'integer']),
+                                TextInput::make('specification_value')
+                                    ->rules(['required', 'string']),
+                            ])
+                            ->columns(3)
+                    ]),
                 Step::make('Product Images')
                     ->description('Give the Product Details')
                     ->schema([
                         FileUpload::make('image')
                             ->label('Main Product Image')
                             ->image()
-                            ->rules(['required', 'image'])->columnSpan(2),
+                            ->rules(['required', 'image']),
                         FileUpload::make('images')
                             ->multiple()
                             ->label('Other Images')
                             ->image()
-                            ->rules(['required', 'image'])->columnSpan(2),
-                    ])
-                    ->columns(2),
+                            ->rules(['required', 'image']),
+                    ]),
             ])
             ->action(function (array $data): void {
                 dd($data);

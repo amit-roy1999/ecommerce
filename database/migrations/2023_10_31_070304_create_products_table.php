@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->string('image');
             $table->longText('description');
-            $table->bigInteger('price');
-            $table->integer('avalebel_discount_in_percentage');
+            $table->float('price', 12);
+            $table->float('avalebel_discount_in_percentage', 4);
             $table->timestamps();
         });
     }
