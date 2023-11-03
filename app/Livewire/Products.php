@@ -108,6 +108,7 @@ class Products extends Component implements HasForms, HasActions, HasTable
             ->columns([
                 TextColumn::make('id')->rowIndex()->sortable(),
                 ImageColumn::make('image')->circular(),
+                ImageColumn::make('images.url')->circular()->stacked(),
                 TextColumn::make('name')->sortable()->searchable(isIndividual: true),
                 TextColumn::make('slug')->sortable()->searchable(isIndividual: true),
                 TextColumn::make('category.name')->badge()->searchable(isIndividual: true),

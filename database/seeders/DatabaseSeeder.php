@@ -26,5 +26,8 @@ class DatabaseSeeder extends Seeder
         \App\Models\Brand::factory(10)->create();
         \App\Models\User::factory(100)->create();
         \App\Models\Product::factory(100)->create();
+        \App\Models\Image::factory(300)->modelTypeAndId("App\Models\Product")->create();
+        \App\Models\SpecificationName::factory(5)->create();
+        \App\Models\SpecificationUnit::factory(5)->create();
     }
 }

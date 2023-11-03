@@ -13,6 +13,8 @@
 
 use App\Livewire\Brands;
 use App\Livewire\Products;
+use App\Livewire\SpecificationNames;
+use App\Livewire\SpecificationUnits;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['namespace' => 'App\Livewire','prefix' => 'admin', 'as' => 'admin.'], function () {
@@ -31,6 +33,8 @@ Route::group(['namespace' => 'App\Livewire','prefix' => 'admin', 'as' => 'admin.
         Route::get('/categories', Categories::class)->name('categories');
         Route::get('/brands', Brands::class)->name('brands');
         Route::get('/products', Products::class)->name('products');
+        Route::get('/specification-name', SpecificationNames::class)->name('specification_names');
+        Route::get('/specification-units', SpecificationUnits::class)->name('specification_unites');
     });
 });
 
